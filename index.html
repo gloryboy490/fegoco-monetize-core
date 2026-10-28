@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FEGOCO Monetize - SSAI Stream Player</title>
+    <!-- Include Tailwind for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Include hls.js for robust HLS stream playback -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 flex flex-col items-center justify-center h-screen m-0">
+
+    <div class="text-center max-w-2xl w-full px-4">
+        <h1 class="text-2xl font-bold mb-1 tracking-tight">FEGOCO Monetize Core</h1>
+        <p class="text-slate-400 text-sm mb-6">Server-Side Ad Insertion (SSAI) Live Proxy Stream</p>
+        
+        <div class="shadow-2xl rounded-xl overflow-hidden bg-slate-900 border border-slate-800">
+            <video id="video" controls class="w-full aspect-video"></video>
+        </div>
+    </div>
+
+    <script>
+      var video = document.getElementById('video');
+      var videoSrc = 'http://localhost:8080/stream/manifest.m3u8';
+      
+      if (Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource(videoSrc);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+          video.play();
+        });
+      }
+      // Fallback for Safari (native HLS support)
+      else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = videoSrc;
+        video.addEventListener('loadedmetadata', function() {
+          video.play();
+        });
+      }
+    </script>
+</body>
+</html>
